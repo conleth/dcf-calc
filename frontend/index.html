@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intrinsic Value Workbench</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Intrinsic Value Workbench</h1>
+        <p>Evaluate businesses the Buffett &amp; Carlin way. Keep expectations conservative and demand a margin of safety.</p>
+    </header>
+
+    <main>
+        <section class="card" id="inputs">
+            <h2>Assumptions</h2>
+            <form id="valuation-form">
+                <div class="form-grid">
+                    <label>
+                        <span>Ticker</span>
+                        <input type="text" name="ticker" id="ticker" placeholder="AAPL" required>
+                    </label>
+                    <label>
+                        <span>Mode</span>
+                        <select name="mode" id="mode">
+                            <option value="dcf">Discounted Cash Flow</option>
+                            <option value="ddm">Dividend Discount Model</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Forecast Years</span>
+                        <input type="number" name="forecast_years" id="forecast_years" value="10" min="3" max="20">
+                    </label>
+                    <label>
+                        <span>Discount Rate (%)</span>
+                        <input type="number" name="discount_rate" id="discount_rate" value="10" min="1" max="30">
+                    </label>
+                    <label>
+                        <span>Margin of Safety (%)</span>
+                        <input type="number" name="margin_of_safety" id="margin_of_safety" value="30" min="0" max="70">
+                    </label>
+                    <label class="toggle">
+                        <input type="checkbox" id="use_owner_earnings">
+                        <span>Use Owner Earnings (DCF)</span>
+                    </label>
+                </div>
+
+                <div class="scenario-wrapper">
+                    <h3>Scenarios</h3>
+                    <p class="hint">Keep growth <strong>&lt; 15%</strong> and terminal multiples <strong>&lt; 20x</strong> to stay conservative.</p>
+                    <div class="scenario-grid" id="scenarios-container">
+                        <!-- scenarios inserted by JS -->
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit">Run Valuation</button>
+                    <button type="button" id="batch-trigger">Batch Mode</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="card" id="warnings" hidden>
+            <h2>Guidance</h2>
+            <ul id="warnings-list"></ul>
+        </section>
+
+        <section class="card" id="results" hidden>
+            <h2>Valuation Summary</h2>
+            <div class="summary-grid">
+                <div>
+                    <h3>Intrinsic Value</h3>
+                    <p id="intrinsic-value">–</p>
+                </div>
+                <div>
+                    <h3>Buy Price (Margin of Safety)</h3>
+                    <p id="buy-price">–</p>
+                </div>
+                <div>
+                    <h3>Market Price</h3>
+                    <p id="market-price">–</p>
+                </div>
+                <div>
+                    <h3>Upside / Downside</h3>
+                    <p id="upside">–</p>
+                </div>
+            </div>
+            <div class="charts">
+                <canvas id="scenarioChart"></canvas>
+                <canvas id="cashflowChart"></canvas>
+            </div>
+            <div class="scenario-table" id="scenario-table"></div>
+        </section>
+
+        <section class="card" id="batch-panel" hidden>
+            <h2>Batch Valuation</h2>
+            <p>Enter one ticker per line. Uses the same assumptions above.</p>
+            <textarea id="batch-tickers" rows="5" placeholder="AAPL\nMSFT\nKO"></textarea>
+            <div class="actions">
+                <button type="button" id="run-batch">Run Batch</button>
+                <button type="button" id="close-batch">Close</button>
+            </div>
+            <div id="batch-results"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Inputs should reflect durable, high-quality businesses. Revisit assumptions if projected growth or multiples look heroic.</p>
+    </footer>
+
+    <script src="app.js" type="module"></script>
+</body>
+</html>
